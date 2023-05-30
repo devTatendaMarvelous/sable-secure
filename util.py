@@ -1,6 +1,6 @@
 import os
 import pickle
-
+import mysql.connector
 import tkinter as tk
 from tkinter import messagebox
 import face_recognition
@@ -37,7 +37,7 @@ def get_text_label(window, text):
 
 def get_entry_text(window):
     inputtxt = tk.Text(window,
-                       height=2,
+                       height=1,
                        width=15, font=("Arial", 32))
     return inputtxt
 
@@ -73,3 +73,10 @@ def recognize(img, db_path):
     else:
         return 'unknown_person'
 
+
+conn = mysql.connector.connect(
+    host='localhost',
+    user='root',
+    password='thetechiam03',
+    database='sable'
+)
