@@ -22,7 +22,6 @@ def get_button(window, text, color, command, fg='white'):
 
     return button
 
-
 def get_img_label(window):
     label = tk.Label(window)
     label.grid(row=0, column=0)

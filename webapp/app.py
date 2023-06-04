@@ -17,11 +17,21 @@ mysql = MySQL(app)
 @app.route('/')
 def Index():
     cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM students")
+    cur.execute("SELECT * FROM employees")
     data = cur.fetchall()
     cur.close()
 
-    return render_template('index.html', students=data)
+    return render_template('index.html', employees=data)
+
+
+@app.route('/logs')
+def logs():
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM logs")
+    data = cur.fetchall()
+    cur.close()
+
+    return render_template('logs.html', logs=data)
 
 
 @app.route('/insert', methods=['POST'])

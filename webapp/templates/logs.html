@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Sable Secure Logs</title>
+
+
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+     <link href="../static/datatable/datatable.css" rel="stylesheet">
+     <link href="../static/datatable/buttons.css" rel="stylesheet">
+</head>
+
+<body>
+
+     <div class="container-fluid">
+          <h1 class="text-center alert alert-info"> Sable Secure </h1>
+          <div class="row">
+               <div class="col-sm-2"></div>
+
+               <!-- content goes here -->
+               <div class="col-sm-8">
+                    <h2>Logs List </h2>
+
+                    {%with messages = get_flashed_messages()%}
+                    {%if messages%}
+                    {% for message in messages %}
+                    <div class="alert alert-success alert-dismissable" role="alert">
+                         <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                              <span aria-hidden="true">&times;</span>
+                         </button>
+                         {{message}}
+                    </div>
+                    {%endfor%}
+                    {%endif%}
+                    {%endwith%}
+
+
+
+                    <table class="table table-hover" id="example">
+                         <thead>
+                              <tr>
+                                   <th scope="col">S/N</th>
+                                   <th scope="col">Name</th>
+                                   <th scope="col">Activity</th>
+                                   <th scope="col">Date</th>
+                              </tr>
+                         </thead>
+                         <tbody>
+                              {% for row in logs %}
+                              <tr>
+                                   <td>{{row.0}}</td>
+                                   <td>{{row.1}}</td>
+                                   <td>{{row.2}}</td>
+                                   <td>{{row.3}}</td>
+
+                              </tr>
+
+
+
+
+                              {% endfor %}
+                         </tbody>
+
+                    </table>
+               </div>
+               <!-- Content ends here-->
+
+
+               <div class="col-sm-2"></div>
+
+          </div>
+     </div>
+
+     <script type="text/javascript" src="../static/js/jquery-3.2.1.min.js' ) }}">
+     </script>
+     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+          integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+          crossorigin="anonymous"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+          integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+          crossorigin="anonymous"></script>
+     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+          integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+          crossorigin="anonymous"></script>
+
+     <script type="text/javascript" src="../static/datatable/datatablejQueryMin.js"></script>
+     <script type="text/javascript" src="../static/datatable/buttondatatablejQueryMin.js"></script>
+     <script type="text/javascript" src="../static/datatable/pdf.js"></script>
+     <script type="text/javascript" src="../static/datatable/pdf2.js"></script>
+     <script type="text/javascript" src="../static/datatable/html5buttons.js"></script>
+     <script type="text/javascript" src="../static/datatable/print.js"></script>
+     <script type="text/javascript" src="../static/datatable/dataTable.swf"></script>
+
+     <script>
+          $(document).ready(function () {
+               $('#example').DataTable({
+
+                    dom: 'Bfrtip',
+                    buttons: [
+                         {
+                              extend: 'excel',
+                              text: 'Export to excel',
+                              className: 'btn btn-default btn-xs'
+                         },
+                         {
+                              extend: 'print',
+                              text: 'Send to Print',
+                              className: 'btn btn-default btn-xs'
+                         }
+                    ]
+               });
+          });
+
+     </script>
+
+     <style>
+          .dataTables_filter input {
+               width: 300px;
+               height: 40px;
+               font-size: 20px;
+               border: 1px solid
+          }
+
+          .dataTables_wrapper .dataTables_filter {
+               text-align: center;
+
+          }
+
+          .buttons-excel {
+               background-color: green;
+          }
+
+          #example {
+               /*text-transform: uppercase;*/
+               font-size: 13px;
+
+          }
+     </style>
+
+</body>
+
+</html>

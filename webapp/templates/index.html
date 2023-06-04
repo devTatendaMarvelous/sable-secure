@@ -5,23 +5,25 @@
      <meta charset="UTF-8">
      <meta http-equiv="X-UA-Compatible" content="IE=edge">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>TechSky</title>
+     <title>Sable Secure</title>
 
 
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+     <link href="../static/datatable/datatable.css" rel="stylesheet">
+     <link href="../static/datatable/buttons.css" rel="stylesheet">
 </head>
 
 <body>
 
      <div class="container-fluid">
-          <h1 class="text-center alert alert-danger">Python Flask CRUD Application</h1>
+          <h1 class="text-center alert alert-info"> Sable Secure</h1>
           <div class="row">
                <div class="col-sm-2"></div>
 
                <!-- content goes here -->
                <div class="col-sm-8">
-                    <h2>Student List <button class="btn btn-primary float-right" data-toggle="modal"
-                              data-target="#myModal">Add Student</button></h2>
+                    <h2>Employees List </h2>
 
                     {%with messages = get_flashed_messages()%}
                     {%if messages%}
@@ -37,14 +39,14 @@
                     {%endwith%}
 
 
-                    <!-- Enter New Student Modal -->
+                    <!-- Enter New employee Modal -->
                     <div id="myModal" class="modal fade" role="dialog">
                          <div class="modal-dialog">
                               <div class="modal-content">
 
                                    <div class="modal-header">
                                         <h5 class="modal-title text-primary" style="align-content: center;">Please Add
-                                             New Student</h5>
+                                             New employee</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                              <span aria-hidden="true">&times;</span>
                                         </button>
@@ -66,9 +68,9 @@
                                              </div>
 
                                              <div class="form-group">
-                                                  <label>Phone Number</label>
-                                                  <input name="phone" type="text" class="form-control"
-                                                       id="exampleFormControlInput1" placeholder="Enter Phone Number">
+                                                  <label>emp Number</label>
+                                                  <input name="emp" type="text" class="form-control"
+                                                       id="exampleFormControlInput1" placeholder="Enter emp Number">
                                              </div>
 
                                              <button type="submit" class="btn btn-primary mb-2">Save</button>
@@ -83,20 +85,20 @@
                     </div>
 
 
-                    <!-- End of Enter New Student Modal -->
+                    <!-- End of Enter New employee Modal -->
 
-                    <table class="table table-hover">
+                    <table class="table table-hover" id="example">
                          <thead>
                               <tr>
                                    <th scope="col">S/N</th>
                                    <th scope="col">Name</th>
                                    <th scope="col">Email</th>
-                                   <th scope="col">Phone</th>
+                                   <th scope="col">Employee Number</th>
                                    <th scope="col">Action</th>
                               </tr>
                          </thead>
                          <tbody>
-                              {% for row in students %}
+                              {% for row in employees %}
                               <tr>
                                    <td>{{row.0}}</td>
                                    <td>{{row.1}}</td>
@@ -106,19 +108,19 @@
                                         <a href="/update/{{row.0}}" class="btn btn-warning btn-sm" data-toggle="modal"
                                              data-target="#modaledit{{row.0}}">Edit</a>
                                         <a href="/delete/{{ row.0 }}"
-                                             onclick="return confirm('Are Sure Want To Deleted ?')"
+                                             onclick="return confirm(' Are Sure Want To Deleted ?')"
                                              class="btn btn-danger btn-sm">Delete</a>
                                    </td>
                               </tr>
 
-                              <!-- Enter New Student Modal -->
+                              <!-- Enter New employee Modal -->
                               <div id="modaledit{{row.0}}" class="modal fade" role="dialog">
                                    <div class="modal-dialog">
                                         <div class="modal-content">
 
                                              <div class="modal-header">
                                                   <h5 class="modal-title text-primary" style="align-content: center;">
-                                                       Update Student Details</h5>
+                                                       Update employee Details</h5>
                                                   <button type="button" class="close" data-dismiss="modal"
                                                        aria-label="Close">
                                                        <span aria-hidden="true">&times;</span>
@@ -127,7 +129,7 @@
 
                                              <div class="modal-body">
 
-                                                  <form action="{{ url_for('update')}}" method="POST">
+                                                  <form action="{{ url_for('update')}}" method=" POST">
                                                        <input type="hidden" name="id" value="{{row.0}}">
                                                        <div class="form-group">
                                                             <label>Full Name</label>
@@ -144,10 +146,10 @@
                                                        </div>
 
                                                        <div class="form-group">
-                                                            <label>Phone Number</label>
-                                                            <input value="{{row.3}}" name="phone" type="text"
+                                                            <label>emp Number</label>
+                                                            <input value="{{row.3}}" name="emp" type="text"
                                                                  class="form-control" id="exampleFormControlInput1"
-                                                                 placeholder="Enter Phone Number">
+                                                                 placeholder="Enter emp Number">
                                                        </div>
 
                                                        <button type="submit"
@@ -163,7 +165,7 @@
                               </div>
 
 
-                              <!-- End of Edit Student Modal -->
+                              <!-- End of Edit employee Modal -->
 
 
                               {% endfor %}
@@ -179,7 +181,8 @@
           </div>
      </div>
 
-     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.2.1.min.js') }}"></script>
+     <script type="text/javascript" src="../static/js/jquery-3.2.1.min.js' ) }}">
+     </script>
      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
           integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
           crossorigin="anonymous"></script>
@@ -189,6 +192,57 @@
      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
           integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
           crossorigin="anonymous"></script>
+
+     <script type="text/javascript" src="../static/datatable/datatablejQueryMin.js"></script>
+     <script type="text/javascript" src="../static/datatable/buttondatatablejQueryMin.js"></script>
+     <script type="text/javascript" src="../static/datatable/pdf.js"></script>
+     <script type="text/javascript" src="../static/datatable/pdf2.js"></script>
+     <script type="text/javascript" src="../static/datatable/html5buttons.js"></script>
+     <script type="text/javascript" src="../static/datatable/print.js"></script>
+     <script type="text/javascript" src="../static/datatable/dataTable.swf"></script>
+
+     <script>
+          $(document).ready(function () {
+               $('#example').DataTable({
+
+                    dom: 'Bfrtip',
+                    buttons: [
+                         {
+                              extend: 'excel',
+                              text: 'Export to excel',
+                              className: 'btn btn-default btn-xs'
+                         },
+                         {
+                              extend: 'print',
+                              text: 'Send to Print',
+                              className: 'btn btn-default btn-xs'
+                         }
+                    ]
+               });
+          });
+
+     </script>
+
+     <style>
+          .dataTables_filter input {
+               width: 300px;
+               height: 40px;
+               font-size: 20px;
+               border: 1px solid
+          }
+
+          .dataTables_wrapper .dataTables_filter {
+               text-align: center;
+
+          }
+
+          #example {
+               /*text-transform: uppercase;*/
+               font-size: 13px;
+
+          }
+     </style>
+
 </body>
 
 </html>
