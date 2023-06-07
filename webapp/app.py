@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, url_for, flash
 from werkzeug.utils import redirect
 from flask_mysqldb import MySQL
 
-
 app = Flask(__name__)
 app.secret_key = 'many random bytes'
 
@@ -16,12 +15,37 @@ mysql = MySQL(app)
 
 @app.route('/')
 def Index():
+    return render_template('index.html')
+
+
+@app.route('/login', methods=['POST'])
+def login():
+    if request.method == "POST":
+        flash("Data Inserted Successfully")
+        email = request.form['email']
+        emp = request.form['password']
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM employees WHERE email=%s AND emp=%s",(email,emp))
+        data = cur.fetchall()
+        cur.close()
+        if data:
+            return redirect(url_for('Home'))
+        else:
+            return redirect(url_for('Index'))
+
+
+@app.route('/home')
+def Home():
+        return render_template('home.html')
+
+@app.route('/employees')
+def Employees():
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM employees")
     data = cur.fetchall()
     cur.close()
 
-    return render_template('index.html', employees=data)
+    return render_template('employees.html', employees=data)
 
 
 @app.route('/logs')
@@ -43,7 +67,7 @@ def insert():
         phone = request.form['phone']
         cur = mysql.connection.cursor()
         cur.execute(
-            "INSERT INTO students (name, email, phone) VALUES (%s, %s, %s)", (name, email, phone))
+            "INSERT INTO employees (name, email, phone) VALUES (%s, %s, %s)", (name, email, phone))
         mysql.connection.commit()
         return redirect(url_for('Index'))
 
@@ -52,7 +76,7 @@ def insert():
 def delete(id_data):
     flash("Record Has Been Deleted Successfully")
     cur = mysql.connection.cursor()
-    cur.execute("DELETE FROM students WHERE id=%s", (id_data,))
+    cur.execute("DELETE FROM employees WHERE id=%s", (id_data,))
     mysql.connection.commit()
     return redirect(url_for('Index'))
 
@@ -67,7 +91,7 @@ def update():
 
         cur = mysql.connection.cursor()
         cur.execute("""
-        UPDATE students SET name=%s, email=%s, phone=%s
+        UPDATE employees SET name=%s, email=%s, phone=%s
         WHERE id=%s
         """, (name, email, phone, id_data))
         flash("Data Updated Successfully")
