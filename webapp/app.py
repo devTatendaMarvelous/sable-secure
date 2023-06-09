@@ -7,7 +7,7 @@ app.secret_key = 'many random bytes'
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'thetechiam03'
+app.config['MYSQL_PASSWORD'] = 'sable-secure01'
 app.config['MYSQL_DB'] = 'sable'
 
 mysql = MySQL(app)
@@ -21,22 +21,26 @@ def Index():
 @app.route('/login', methods=['POST'])
 def login():
     if request.method == "POST":
-        flash("Data Inserted Successfully")
+
         email = request.form['email']
         emp = request.form['password']
         cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM employees WHERE email=%s AND emp=%s",(email,emp))
+        cur.execute(
+            "SELECT * FROM employees WHERE email=%s AND emp=%s", (email, emp))
         data = cur.fetchall()
         cur.close()
         if data:
-            return redirect(url_for('Home'))
+            flash("Logged in Successfully")
+            return redirect(url_for('logs'))
         else:
-            return redirect(url_for('Index'))
+            flash("Invalid credentials")
+            return redirect(url_for('Loginp'))
 
 
-@app.route('/home')
-def Home():
-        return render_template('home.html')
+@app.route('/loginp')
+def Loginp():
+    return render_template('login.html')
+
 
 @app.route('/employees')
 def Employees():
@@ -78,7 +82,7 @@ def delete(id_data):
     cur = mysql.connection.cursor()
     cur.execute("DELETE FROM employees WHERE id=%s", (id_data,))
     mysql.connection.commit()
-    return redirect(url_for('Index'))
+    return redirect(url_for('Employees'))
 
 
 @app.route('/update', methods=['POST', 'GET'])
@@ -88,7 +92,6 @@ def update():
         name = request.form['name']
         email = request.form['email']
         phone = request.form['phone']
-
         cur = mysql.connection.cursor()
         cur.execute("""
         UPDATE employees SET name=%s, email=%s, phone=%s
@@ -105,14 +108,13 @@ def create_log():
 
     # Create the log file
     if request.method == "POST":
-            # flash("Data Inserted Successfully")
-            name = data['name']
-            email = data['state']
-            cur = mysql.connection.cursor()
-            cur.execute(
-                "INSERT INTO logs (name, state) VALUES (%s, %s)", (data['name'], data['state']))
-            mysql.connection.commit()
-           
+        # flash("Data Inserted Successfully")
+        name = data['name']
+        email = data['state']
+        cur = mysql.connection.cursor()
+        cur.execute(
+            "INSERT INTO logs (name, state) VALUES (%s, %s)", (data['name'], data['state']))
+        mysql.connection.commit()
 
     # Return a response
     return {'status': 'success'}

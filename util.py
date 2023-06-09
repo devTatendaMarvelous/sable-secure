@@ -8,19 +8,20 @@ import face_recognition
 
 def get_button(window, text, color, command, fg='white'):
     button = tk.Button(
-                        window,
-                        text=text,
-                        activebackground="black",
-                        activeforeground="white",
-                        fg=fg,
-                        bg=color,
-                        command=command,
-                        height=2,
-                        width=20,
-                        font=('Helvetica bold', 20)
-                    )
+        window,
+        text=text,
+        activebackground="black",
+        activeforeground="white",
+        fg=fg,
+        bg=color,
+        command=command,
+        height=2,
+        width=20,
+        font=('Helvetica bold', 20)
+    )
 
     return button
+
 
 def get_img_label(window):
     label = tk.Label(window)
@@ -64,7 +65,8 @@ def recognize(img, db_path):
         file = open(path_, 'rb')
         embeddings = pickle.load(file)
 
-        match = face_recognition.compare_faces([embeddings], embeddings_unknown)[0]
+        match = face_recognition.compare_faces(
+            [embeddings], embeddings_unknown)[0]
         j += 1
 
     if match:
@@ -76,6 +78,6 @@ def recognize(img, db_path):
 conn = mysql.connector.connect(
     host='localhost',
     user='root',
-    password='thetechiam03',
+    password='sable-secure01',
     database='sable'
 )
