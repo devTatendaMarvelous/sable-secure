@@ -83,15 +83,15 @@ class App:
 
     def register_new_user(self):
         self.register_new_user_window = tk.Toplevel(self.main_window)
-        self.register_new_user_window.geometry("1200x520+370+120")
+        self.register_new_user_window.geometry("1200x620+370+120")
 
         self.accept_button_register_new_user_window = util.get_button(
             self.register_new_user_window, 'Accept', 'green', self.accept_register_new_user)
-        self.accept_button_register_new_user_window.place(x=750, y=320)
+        self.accept_button_register_new_user_window.place(x=750, y=420)
 
         self.try_again_button_register_new_user_window = util.get_button(
             self.register_new_user_window, 'Try again', 'red', self.try_again_register_new_user)
-        self.try_again_button_register_new_user_window.place(x=750, y=400)
+        self.try_again_button_register_new_user_window.place(x=750, y=820)
 
         self.capture_label = util.get_img_label(self.register_new_user_window)
         self.capture_label.place(x=10, y=0, width=700, height=500)
@@ -112,12 +112,19 @@ class App:
             self.register_new_user_window, 'Email:')
         self.text_label_register_email.place(x=750, y=110)
 
+        self.entry_text_register_dep = util.get_entry_text(
+            self.register_new_user_window)
+        self.entry_text_register_dep.place(x=750, y=360)
+        self.text_label_register_dep = util.get_text_label(
+            self.register_new_user_window, 'Department:')
+        self.text_label_register_dep.place(x=750, y=210)
+
         self.entry_text_register_emp = util.get_entry_text(
             self.register_new_user_window)
         self.entry_text_register_emp.place(x=750, y=260)
         self.text_label_register_emp = util.get_text_label(
             self.register_new_user_window, 'Password:')
-        self.text_label_register_emp.place(x=750, y=210)
+        self.text_label_register_emp.place(x=750, y=318)
 
     def try_again_register_new_user(self):
         self.register_new_user_window.destroy()
@@ -136,13 +143,20 @@ class App:
         name = self.entry_text_register_new_user.get(1.0, "end-1c")
         email = self.entry_text_register_email.get(1.0, "end-1c")
         emp = self.entry_text_register_emp.get(1.0, "end-1c")
+        dep = self.entry_text_register_dep.get(1.0, "end-1c")
+
+        if not name.isalpha():
+            self.register_new_user_window.destroy()
+            util.msg_box(
+                'invalid name', 'Invalid name. Please a name cannot contain numbers.')
+            return
 
         if '@' in email:
             embeddings = face_recognition.face_encodings(
                 self.register_new_user_capture)[0]
             cur = conn.cursor()
             cur.execute(
-                "INSERT INTO employees (name, email, emp) VALUES (%s, %s, %s)", (name, email, emp))
+                "INSERT INTO employees (name, email, emp, department)VALUES (%s, %s, %s, %s)", (name, email, emp, dep))
             conn.close()
             file = open(os.path.join(
                 self.db_dir, '{}.pickle'.format(name)), 'wb')

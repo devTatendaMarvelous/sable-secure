@@ -52,6 +52,16 @@ def Employees():
     return render_template('employees.html', employees=data)
 
 
+@app.route('/edit/<string:id_data>')
+def Edit(id_data):
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM employees WHERE id=%s", (id_data,))
+    data = cur.fetchall()
+    cur.close()
+
+    return render_template('edit.html', row=data)
+
+
 @app.route('/logs')
 def logs():
     cur = mysql.connection.cursor()
@@ -85,20 +95,21 @@ def delete(id_data):
     return redirect(url_for('Employees'))
 
 
-@app.route('/update', methods=['POST', 'GET'])
+@app.route('/update', methods=['GET', 'POST'])
 def update():
     if request.method == 'POST':
         id_data = request.form['id']
         name = request.form['name']
         email = request.form['email']
-        phone = request.form['phone']
+        department = request.form['department']
         cur = mysql.connection.cursor()
-        cur.execute("""
-        UPDATE employees SET name=%s, email=%s, phone=%s
-        WHERE id=%s
-        """, (name, email, phone, id_data))
+        cur.execute("UPDATE employees SET name=%s, email=%s, department=%s WHERE id=%s",
+                    (name, email, department, id_data))
         flash("Data Updated Successfully")
-        return redirect(url_for('Index'))
+        return redirect(url_for('Employees'))
+    else:
+        flash("Data Updated failed")
+        return redirect(url_for('Employees'))
 
 
 @app.route('/create-log', methods=['POST'])
