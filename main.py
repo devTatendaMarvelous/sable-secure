@@ -20,6 +20,10 @@ class App:
             self.main_window, 'login', 'green', self.login)
         self.login_button_main_window.place(x=750, y=200)
 
+        self.logout_button_main_window = util.get_button(
+            self.main_window, 'logout', 'red', self.logout)
+        self.logout_button_main_window.place(x=750, y=300)
+
         self.webcam_label = util.get_img_label(self.main_window)
         self.webcam_label.place(x=10, y=0, width=700, height=500)
 
@@ -57,6 +61,19 @@ class App:
             cur = conn.cursor()
             cur.execute(
                 "INSERT INTO logs (name, state) VALUES (%s, %s)", (name, 'in'))
+            conn.close()
+
+    def logout(self):
+        name = util.recognize(self.most_recent_capture_arr, self.db_dir)
+
+        if name in ['unknown_person', 'no_persons_found']:
+            util.msg_box(
+                'Ups...', 'Unknown user. Please register new user or try again.')
+        else:
+            util.msg_box('Hasta la vista !', 'Goodbye, {}.'.format(name))
+            cur = conn.cursor()
+            cur.execute(
+                "INSERT INTO logs (name, state) VALUES (%s, %s)", (name, 'out'))
             conn.close()
 
     def add_img_to_label(self, label):
