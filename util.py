@@ -78,6 +78,6 @@ def recognize(img, db_path):
 conn = mysql.connector.connect(
     host='localhost',
     user='root',
-    password='sable-secure01',
+    password='thetechiam03',
     database='sable'
 )

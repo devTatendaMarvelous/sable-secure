@@ -7,7 +7,7 @@ app.secret_key = 'many random bytes'
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'sable-secure01'
+app.config['MYSQL_PASSWORD'] = 'thetechiam03'
 app.config['MYSQL_DB'] = 'sable'
 
 mysql = MySQL(app)
