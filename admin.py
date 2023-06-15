@@ -1,35 +1,55 @@
 import os.path
 import datetime
 import pickle
-
+import mysql.connector
 import tkinter as tk
 import cv2
 from PIL import Image, ImageTk
 import face_recognition
 
 import util
+
 from util import conn
 
 
 class App:
     def __init__(self):
         self.main_window = tk.Tk()
-        self.main_window.geometry("1200x520+350+100")
+        # Get screen resolution
+        screen_width = self.main_window.winfo_screenwidth()
+        screen_height = self.main_window.winfo_screenheight()
+
+        # Calculate window dimensions
+        border_width = 2
+        title_bar_height = 30
+        window_width = screen_width - border_width * 2
+        window_height = screen_height - title_bar_height - border_width * 2
+        self.xpos = window_width // 2 - border_width
+        self.xpos = self.xpos+100
+
+        # Set window dimensions and position
+        self.main_window.geometry("{}x{}+{}+{}".format(window_width,
+                                                       window_height, border_width, title_bar_height))
+
+        # self.main_window.geometry("1200x520+350+100")
 
         self.login_button_main_window = util.get_button(
             self.main_window, 'login', 'green', self.login)
-        self.login_button_main_window.place(x=750, y=200)
+        self.login_button_main_window.place(x=self.xpos, y=400)
 
         self.logout_button_main_window = util.get_button(
             self.main_window, 'logout', 'red', self.logout)
-        self.logout_button_main_window.place(x=750, y=300)
+        self.logout_button_main_window.place(x=self.xpos, y=500)
 
         self.register_new_user_button_main_window = util.get_button(self.main_window, 'register new user', 'gray',
                                                                     self.register_new_user, fg='black')
-        self.register_new_user_button_main_window.place(x=750, y=400)
+        self.register_new_user_button_main_window.place(x=self.xpos, y=600)
 
+        # label_width = window_width // 2 - border_width
+        # label_height = window_height - border_width * 2
+        # webcam_label.place()
         self.webcam_label = util.get_img_label(self.main_window)
-        self.webcam_label.place(x=10, y=0, width=700, height=500)
+        self.webcam_label.place(relx=0, rely=0, relwidth=0.5, relheight=1)
 
         self.add_webcam(self.webcam_label)
 
@@ -67,7 +87,7 @@ class App:
             cur = conn.cursor()
             cur.execute(
                 "INSERT INTO logs (name, state) VALUES (%s, %s)", (name, 'in'))
-            conn.close()
+            # conn.close()
 
     def logout(self):
         name = util.recognize(self.most_recent_capture_arr, self.db_dir)
@@ -77,54 +97,67 @@ class App:
                 'Ups...', 'Unknown user. Please register new user or try again.')
         else:
             util.msg_box('Hasta la vista !', 'Goodbye, {}.'.format(name))
-            with open(self.log_path, 'a') as f:
-                f.write('{},{},out\n'.format(name, datetime.datetime.now()))
-                f.close()
+            cur = conn.cursor()
+            cur.execute(
+                "INSERT INTO logs (name, state) VALUES (%s, %s)", (name, 'out'))
+            # conn.close()
 
     def register_new_user(self):
         self.register_new_user_window = tk.Toplevel(self.main_window)
-        self.register_new_user_window.geometry("1200x620+370+120")
+        screen_width = self.register_new_user_window.winfo_screenwidth()
+        screen_height = self.register_new_user_window.winfo_screenheight()
 
+        # Calculate window dimensions
+        border_width = 2
+        title_bar_height = 30
+        window_width = screen_width - border_width * 2
+        window_height = screen_height - title_bar_height - border_width * 2
+        self.xpos = window_width // 2 - border_width
+
+        self.register_new_user_window.geometry("{}x{}+{}+{}".format(window_width,
+                                                                    window_height, border_width, title_bar_height))
         self.accept_button_register_new_user_window = util.get_button(
             self.register_new_user_window, 'Accept', 'green', self.accept_register_new_user)
-        self.accept_button_register_new_user_window.place(x=750, y=420)
+        self.accept_button_register_new_user_window.place(
+            x=self.xpos+50, y=790)
 
         self.try_again_button_register_new_user_window = util.get_button(
             self.register_new_user_window, 'Try again', 'red', self.try_again_register_new_user)
-        self.try_again_button_register_new_user_window.place(x=750, y=820)
+        self.try_again_button_register_new_user_window.place(
+            x=self.xpos+450, y=790)
 
         self.capture_label = util.get_img_label(self.register_new_user_window)
-        self.capture_label.place(x=10, y=0, width=700, height=500)
+        self.capture_label.place(relx=0, rely=0, relwidth=0.5, relheight=1)
 
         self.add_img_to_label(self.capture_label)
 
         self.entry_text_register_new_user = util.get_entry_text(
             self.register_new_user_window)
-        self.entry_text_register_new_user.place(x=750, y=55)
+        self.entry_text_register_new_user.place(x=self.xpos+50, y=250)
         self.text_label_register_new_user = util.get_text_label(
             self.register_new_user_window, 'Username:')
-        self.text_label_register_new_user.place(x=750, y=15)
+        self.text_label_register_new_user.place(x=self.xpos+50, y=200)
 
         self.entry_text_register_email = util.get_entry_text(
             self.register_new_user_window)
-        self.entry_text_register_email.place(x=750, y=145)
+        self.entry_text_register_email.place(x=self.xpos+50, y=400)
         self.text_label_register_email = util.get_text_label(
             self.register_new_user_window, 'Email:')
-        self.text_label_register_email.place(x=750, y=110)
+        self.text_label_register_email.place(x=self.xpos+50, y=350)
 
         self.entry_text_register_dep = util.get_entry_text(
             self.register_new_user_window)
-        self.entry_text_register_dep.place(x=750, y=360)
+        self.entry_text_register_dep.place(x=self.xpos+50, y=550)
         self.text_label_register_dep = util.get_text_label(
             self.register_new_user_window, 'Department:')
-        self.text_label_register_dep.place(x=750, y=210)
+        self.text_label_register_dep.place(x=self.xpos+50, y=500)
 
         self.entry_text_register_emp = util.get_entry_text(
             self.register_new_user_window)
-        self.entry_text_register_emp.place(x=750, y=260)
+        self.entry_text_register_emp.place(x=self.xpos+50, y=700)
         self.text_label_register_emp = util.get_text_label(
             self.register_new_user_window, 'Password:')
-        self.text_label_register_emp.place(x=750, y=318)
+        self.text_label_register_emp.place(x=self.xpos+50, y=650)
 
     def try_again_register_new_user(self):
         self.register_new_user_window.destroy()
@@ -145,7 +178,7 @@ class App:
         emp = self.entry_text_register_emp.get(1.0, "end-1c")
         dep = self.entry_text_register_dep.get(1.0, "end-1c")
 
-        if not name.isalpha():
+        if not name.replace(" ", "").isalpha():
             self.register_new_user_window.destroy()
             util.msg_box(
                 'invalid name', 'Invalid name. Please a name cannot contain numbers.')
@@ -156,7 +189,7 @@ class App:
                 self.register_new_user_capture)[0]
             cur = conn.cursor()
             cur.execute(
-                "INSERT INTO employees (name, email, emp, department)VALUES (%s, %s, %s, %s)", (name, email, emp, dep))
+                "INSERT INTO employees (name, email,  department,emp)VALUES (%s, %s, %s, %s)", (name, email,  dep, emp))
             conn.close()
             file = open(os.path.join(
                 self.db_dir, '{}.pickle'.format(name)), 'wb')

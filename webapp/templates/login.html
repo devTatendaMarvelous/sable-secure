@@ -129,6 +129,16 @@
                class="bi bi-arrow-up-short"></i></a>
 
      <!-- Vendor JS Files -->
+     <script>
+          // window.location.replace("login.html");
+          history.forward = function () { null };
+          history.back = function () { null };
+          window.addEventListener("beforeunload", function (e) {
+               var confirmationMessage = "\o/";
+               e.returnValue = confirmationMessage;     // Gecko, Trident, Chrome 34+
+               return confirmationMessage;              // Gecko, WebKit, Chrome <34
+          });
+     </script>
      <script src="../static/assets/vendor/apexcharts/apexcharts.min.js"></script>
      <script src="../static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
      <script src="../static/assets/vendor/chart.js/chart.umd.js"></script>

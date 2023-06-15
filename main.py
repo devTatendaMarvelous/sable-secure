@@ -14,18 +14,31 @@ from util import conn
 class App:
     def __init__(self):
         self.main_window = tk.Tk()
-        self.main_window.geometry("1200x520+350+100")
+        # Get screen resolution
+        screen_width = self.main_window.winfo_screenwidth()
+        screen_height = self.main_window.winfo_screenheight()
 
+        # Calculate window dimensions
+        border_width = 2
+        title_bar_height = 30
+        window_width = screen_width - border_width * 2
+        window_height = screen_height - title_bar_height - border_width * 2
+        self.xpos = window_width // 2 - border_width
+        self.xpos = self.xpos+100
+
+        # Set window dimensions and position
+        self.main_window.geometry("{}x{}+{}+{}".format(window_width,
+                                                       window_height, border_width, title_bar_height))
         self.login_button_main_window = util.get_button(
             self.main_window, 'login', 'green', self.login)
-        self.login_button_main_window.place(x=750, y=200)
+        self.login_button_main_window.place(x=self.xpos, y=400)
 
         self.logout_button_main_window = util.get_button(
             self.main_window, 'logout', 'red', self.logout)
-        self.logout_button_main_window.place(x=750, y=300)
+        self.logout_button_main_window.place(x=self.xpos, y=500)
 
         self.webcam_label = util.get_img_label(self.main_window)
-        self.webcam_label.place(x=10, y=0, width=700, height=500)
+        self.webcam_label.place(relx=0, rely=0, relwidth=0.5, relheight=1)
 
         self.add_webcam(self.webcam_label)
 
@@ -61,7 +74,7 @@ class App:
             cur = conn.cursor()
             cur.execute(
                 "INSERT INTO logs (name, state) VALUES (%s, %s)", (name, 'in'))
-            conn.close()
+            # conn.close()
 
     def logout(self):
         name = util.recognize(self.most_recent_capture_arr, self.db_dir)
@@ -74,7 +87,7 @@ class App:
             cur = conn.cursor()
             cur.execute(
                 "INSERT INTO logs (name, state) VALUES (%s, %s)", (name, 'out'))
-            conn.close()
+            # conn.close()
 
     def add_img_to_label(self, label):
         imgtk = ImageTk.PhotoImage(image=self.most_recent_capture_pil)
