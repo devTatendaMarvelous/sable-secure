@@ -42,7 +42,7 @@ class App:
         self.logout_button_main_window.place(x=self.xpos, y=500)
 
         self.register_new_user_button_main_window = util.get_button(self.main_window, 'register new user', 'gray',
-                                                                    self.register_new_user, fg='black')
+                                                                    self.register_new_user, 20, fg='black')
         self.register_new_user_button_main_window.place(x=self.xpos, y=600)
 
         # label_width = window_width // 2 - border_width
@@ -117,14 +117,14 @@ class App:
         self.register_new_user_window.geometry("{}x{}+{}+{}".format(window_width,
                                                                     window_height, border_width, title_bar_height))
         self.accept_button_register_new_user_window = util.get_button(
-            self.register_new_user_window, 'Accept', 'green', self.accept_register_new_user)
+            self.register_new_user_window, 'Accept', 'green', self.accept_register_new_user, 10)
         self.accept_button_register_new_user_window.place(
             x=self.xpos+50, y=790)
 
         self.try_again_button_register_new_user_window = util.get_button(
-            self.register_new_user_window, 'Try again', 'red', self.try_again_register_new_user)
+            self.register_new_user_window, 'Try again', 'red', self.try_again_register_new_user, 10)
         self.try_again_button_register_new_user_window.place(
-            x=self.xpos+450, y=790)
+            x=self.xpos+300, y=790)
 
         self.capture_label = util.get_img_label(self.register_new_user_window)
         self.capture_label.place(relx=0, rely=0, relwidth=0.5, relheight=1)

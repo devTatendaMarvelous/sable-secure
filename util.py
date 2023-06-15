@@ -6,7 +6,7 @@ from tkinter import messagebox
 import face_recognition
 
 
-def get_button(window, text, color, command, fg='white'):
+def get_button(window, text, color, command, width=20, fg='white'):
     button = tk.Button(
         window,
         text=text,
@@ -16,7 +16,7 @@ def get_button(window, text, color, command, fg='white'):
         bg=color,
         command=command,
         height=2,
-        width=20,
+        width=width,
         font=('Helvetica bold', 20)
     )
 
